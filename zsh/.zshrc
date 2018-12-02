@@ -7,3 +7,5 @@ for directory in ~/dotfiles/zsh/{config,aliases,functions,extra}; do
 done;
 unset file;
 unset directory;
+
+source ~/dotfiles/zsh/antigen-config.zsh
