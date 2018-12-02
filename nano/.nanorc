@@ -1,0 +1,4 @@
+include ~/dotfiles/nano/highlighting/markdown.nanorc
+include ~/dotfiles/nano/highlighting/sh.nanorc
+
+set speller "aspell -x -c"

@@ -11,3 +11,4 @@ elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 fi
 
 ln -sv ~/dotfiles/zsh/.zshrc ~/.zshrc
+ln -sv ~/dotfiles/nano/.nanorc ~/.nanorc
