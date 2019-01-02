@@ -96,7 +96,7 @@ def main(argv):
             .format(module=module, command=command)
         )
         if 'become: yes' in open(playbook).read():
-            ansible_run = 'sudo ansible-playbook'
+            ansible_run = 'ansible-playbook --ask-become-pass'
         else:
             ansible_run = 'ansible-playbook'
         os.system(
