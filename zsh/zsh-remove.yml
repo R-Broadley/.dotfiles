@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Remove zshrc extra files directory and content
+      file:
+        path: "{{ ZSHDEST }}"
+        state: absent
+    - name: Remove instructions to zshrc
+      blockinfile:
+        path: "{{ ZSHRC }}"
+        marker: "# {mark} DOTFILES MANAGED BLOCK"
+        block: |
+          # Uninstalled - can safetly be removed.

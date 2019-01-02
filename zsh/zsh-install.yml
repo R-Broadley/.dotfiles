@@ -1,0 +1,65 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Install zsh if not already installed
+      become: yes
+      package:
+        name: zsh
+        state: present
+      when: ansible_os_family != "Solus"
+    - name: Install zsh if not already installed (Solus)
+      become: yes
+      command: eopkg install -y zsh
+      args:
+        creates: "/bin/zsh"
+      when: ansible_os_family == "Solus"
+    - name: Copy zsh alias files to appropriate dir
+      synchronize:
+        mode: push
+        src: "{{ ZSHSRC }}/aliases"
+        dest: "{{ ZSHDEST }}"
+    - name: Copy zsh config files to appropriate dir
+      synchronize:
+        mode: push
+        src: "{{ ZSHSRC }}/config"
+        dest: "{{ ZSHDEST }}"
+    - name: Copy zsh function files to appropriate dir
+      synchronize:
+        mode: push
+        src: "{{ ZSHSRC }}/functions"
+        dest: "{{ ZSHDEST }}"
+    - name: Copy zsh plugin files to appropriate dir
+      synchronize:
+        mode: push
+        src: "{{ ZSHSRC }}/plugins"
+        dest: "{{ ZSHDEST }}"
+    - name: Copy zsh theme files to appropriate dir
+      synchronize:
+        mode: push
+        src: "{{ ZSHSRC }}/themes"
+        dest: "{{ ZSHDEST }}"
+    - name: Add instructions to zshrc
+      blockinfile:
+        path: "{{ ZSHRC }}"
+        marker: "# {mark} DOTFILES MANAGED BLOCK"
+        create: yes
+        backup: yes
+        block: |
+          DISTRO={{ ansible_distribution }}
+          DISTROFAMILY={{ ansible_os_family }}
+
+          for directory in {{ ZSHDEST }}/{config,aliases,functions}; do
+              if [ -d "$directory" ]; then
+                  for file in `find $directory/*.zsh`; do
+                          [ -r "$file" ] && [ -f "$file" ] && source "$file";
+                  done;
+              fi
+          done;
+          unset file;
+          unset directory;
+
+          # Theme
+          source {{ ZSHDEST }}/themes/powerlevel9k/powerlevel9k.zsh-theme
+          
+          # Plugins
+          source {{ ZSHDEST }}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
