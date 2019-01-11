@@ -71,7 +71,7 @@ def main(argv):
         chosen_modules = set(DEPENDENCIES_MAP)
     else:
         chosen_modules = args
-    
+
     try:
         requirements = resolve_dependencies(chosen_modules, command)
     except KeyError:
@@ -79,7 +79,7 @@ def main(argv):
         for arg in bad_args:
             print("Bad option: {}".format(arg))
         app_exit(1)
-    
+
     result = binary_question(
         '{} the following modules? {}'
         .format(command.capitalize(), requirements)
@@ -110,4 +110,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])
