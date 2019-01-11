@@ -1,0 +1,95 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Install tilix if not already installed
+      become: yes
+      package:
+        name: tilix
+        state: present
+      when: ansible_os_family != "Solus"
+    - name: Install tilix if not already installed (Solus)
+      become: yes
+      command: eopkg install -y tilix
+      args:
+        creates: "/usr/bin/tilix"
+      when: ansible_os_family == "Solus"
+    - name: Add tilix dconf settings
+      become: yes
+      blockinfile:
+        path: "{{ DCONF }}"
+        marker: "# {mark} TILIX - DOTFILES MANAGED BLOCK"
+        create: yes
+        backup: no
+        block: |
+          [com/gexperts/Tilix]
+          enable-wide-handle=true
+          focus-follow-mouse=true
+          quake-hide-headerbar=true
+          quake-width-percent=int32 90
+          terminal-title-show-when-single=false
+          theme-variant='dark'
+          
+          [com/gexperts/Tilix/profiles/07abc3f3-35d0-4a0e-8d3c-e7f6c6b4f7b1]
+          cursor-shape='block'
+          cursor-colors-set=false
+          bold-color-set=false
+          terminal-bell='sound'
+          scroll-on-keystroke=true
+          cjk-utf8-ambiguous-width='narrow'
+          default-size-rows=24
+          encoding='UTF-8'
+          triggers=@as []
+          automatic-switch=@as []
+          custom-command='zsh'
+          badge-use-system-font=true
+          text-blink-mode='always'
+          visible-name='Dotfiles Profile'
+          terminal-title='${id}: ${title}'
+          use-theme-colors=true
+          cell-height-scale=1.0
+          badge-text=''
+          exit-action='close'
+          use-system-font=true
+          backspace-binding='ascii-delete'
+          rewrap-on-resize=true
+          foreground-color='#00FF00'
+          login-shell=false
+          background-transparency-percent=5
+          cursor-blink-mode='system'
+          dim-transparency-percent=30
+          bold-is-bright=true
+          cell-width-scale=1.0
+          default-size-columns=80
+          draw-margin=80
+          cursor-foreground-color='#ffffff'
+          allow-bold=true
+          badge-font='Monospace 12'
+          notify-silence-threshold=0
+          background-color='#000000'
+          badge-color='#ffffff'
+          highlight-foreground-color='#ffffff'
+          font='Monospace 12'
+          delete-binding='delete-sequence'
+          palette=['#2E2E34343636', '#CCCC00000000', '#4E4E9A9A0606', '#C4C4A0A00000', '#34346565A4A4', '#757550507B7B', '#060698209A9A', '#D3D3D7D7CFCF', '#555557575353', '#EFEF29292929', '#8A8AE2E23434', '#FCFCE9E94F4F', '#72729F9FCFCF', '#ADAD7F7FA8A8', '#3434E2E2E2E2', '#EEEEEEEEECEC']
+          badge-position='northeast'
+          custom-hyperlinks=@as []
+          scrollback-unlimited=false
+          cursor-background-color='#000000'
+          highlight-background-color='#000000'
+          scroll-on-output=false
+          select-by-word-chars='-,./?%&#:_'
+          use-custom-command=true
+          badge-color-set=false
+          bold-color='#ffffff'
+          highlight-colors-set=false
+          scrollback-lines=8192
+          show-scrollbar=true
+          
+          [com/gexperts/Tilix/profiles]
+          default='07abc3f3-35d0-4a0e-8d3c-e7f6c6b4f7b1'
+          list=['07abc3f3-35d0-4a0e-8d3c-e7f6c6b4f7b1']
+
+          [org/gnome/settings-daemon/plugins/media-keys/custom-keybinding/custom0]
+          name='Tilix Quake'
+          command='tilix --quake'
+          binding='<Super>t'

@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Remove tilix dconf settings
+      become: yes
+      blockinfile:
+        path: "{{ DCONF }}"
+        marker: "# {mark} TILIX - DOTFILES MANAGED BLOCK"
+        block: |
+            # Uninstalled - can safetly be removed.

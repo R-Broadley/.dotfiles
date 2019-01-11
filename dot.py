@@ -12,15 +12,19 @@ ZSHDEST = expanduser('~/.zsh')
 ZSHSRC = join(DOTFILES, 'zsh')
 FONTDEST = expanduser('~/.fonts')
 FONTSRC = join(DOTFILES, 'fonts')
+DCONF = '/etc/dconf/db/local.d/01-dotfiles'
 
 COMMANDS = ['install', 'remove']
 DEPENDENCIES_MAP = {
     'zsh': ['zsh', 'fonts'],
-    'fonts': ['fonts']
+    'fonts': ['fonts'],
+    'tilix': ['tilix']
 }
+REQUIRES_DCONF = {'tilix'}
 MODULES_MAP = {
     'zsh': 'ZSHRC={} ZSHDEST={} ZSHSRC={}'.format(ZSHRC, ZSHDEST, ZSHSRC),
-    'fonts': 'FONTDEST={} FONTSRC={}'.format(FONTDEST, FONTSRC)
+    'fonts': 'FONTDEST={} FONTSRC={}'.format(FONTDEST, FONTSRC),
+    'tilix': 'DCONF={}'.format(DCONF)
 }
 
 
@@ -107,6 +111,9 @@ def main(argv):
                 exvars=MODULES_MAP[module]
             )
         )
+
+    if len(REQUIRES_DCONF.intersection(chosen_modules)) > 0:
+        os.system('sudo dconf update')
 
 
 if __name__ == "__main__":
