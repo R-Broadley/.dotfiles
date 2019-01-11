@@ -45,6 +45,10 @@
         create: yes
         backup: yes
         block: |
+          # Plugins
+          source {{ ZSHDEST }}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+          source {{ ZSHDEST }}/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
           DISTRO={{ ansible_distribution }}
           DISTROFAMILY={{ ansible_os_family }}
 
@@ -60,6 +64,3 @@
 
           # Theme
           source {{ ZSHDEST }}/themes/powerlevel9k/powerlevel9k.zsh-theme
-          
-          # Plugins
-          source {{ ZSHDEST }}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
